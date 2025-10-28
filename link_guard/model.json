@@ -1,0 +1,70 @@
+{
+  "feature_names": [
+    "len_url",
+    "len_hostname",
+    "num_subdomains",
+    "has_ip",
+    "punycode",
+    "uses_http",
+    "query_len",
+    "num_params",
+    "path_len",
+    "count_digits",
+    "count_hyphens",
+    "susp_keyword_count",
+    "entropy_path",
+    "tld_suspicious"
+  ],
+  "coef": [
+    0.0152,
+    -0.0321,
+    0.48,
+    1.85,
+    1.20,
+    0.34,
+    0.005,
+    0.10,
+    0.009,
+    0.025,
+    0.18,
+    0.95,
+    0.72,
+    0.65
+  ],
+  "intercept": -3.45,
+  "scaler": {
+    "means": [
+      80.0,
+      15.0,
+      0.8,
+      0.02,
+      0.01,
+      0.15,
+      12.0,
+      0.8,
+      18.0,
+      3.5,
+      0.6,
+      0.7,
+      2.2,
+      0.05
+    ],
+    "stds": [
+      40.0,
+      6.0,
+      1.2,
+      0.14,
+      0.11,
+      0.36,
+      18.0,
+      1.1,
+      22.0,
+      6.0,
+      0.9,
+      0.9,
+      0.9,
+      0.21
+    ]
+  },
+  "note": "Demo logistic-regression model (synthetic training). Retrain with large labelled dataset (OpenPhish/PhishTank positives and top-sites negatives) and update coefficients/scale for production."
+}

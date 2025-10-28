@@ -1,0 +1,78 @@
+/* styles.css */
+
+#lg-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647; /* maximum to be on top */
+  background: rgba(0,0,0,0.35);
+  transition: opacity 180ms ease;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#lg-overlay.lg-hidden { display: none; }
+#lg-overlay.lg-visible { display: flex; }
+
+#lg-modal {
+  width: 380px;
+  max-width: calc(100% - 32px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+#lg-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(90deg,#f7f7f7,#fff);
+}
+
+#lg-title { font-weight: 700; }
+#lg-close {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#lg-body {
+  padding: 12px 14px;
+  color: #222;
+}
+#lg-body p { margin: 0 0 8px 0; font-weight:600; }
+#lg-reasons { margin: 0; padding-left: 18px; font-size: 13px; color:#333; }
+
+#lg-footer {
+  display:flex;
+  gap:10px;
+  padding: 12px;
+  justify-content: flex-end;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+
+.lg-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight:600;
+  background: #d32f2f; /* red for Continue (we intentionally make it bold) */
+  color: white;
+}
+
+.lg-secondary {
+  background: #e0e0e0;
+  color: #222;
+}
+
+@media (max-width:420px) {
+  #lg-modal { width: 92%; }
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Electron Mini Browser</title>
+  <style>
+   body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #181818;
+  color: #fff;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-color: #20232a;
+  gap: 6px;
+}
+
+input {
+  flex: 1;
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+}
+
+button {
+  background-color: #61dafb;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 500;
+}
+
+button:hover {
+  background-color: #4ec3e6;
+}
+
+/* ✅ Fix for full content display */
+div[style*="flex:1; position:relative;"] {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+webview {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#error-box {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 30%;
+  background: rgba(0,0,0,0.8);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  display: none;
+  z-index: 10;
+}
+
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button id="back">◀</button>
+    <button id="forward">▶</button>
+    <input id="url" type="text" value="https://www.google.com" />
+    <button id="go">Go</button>
+    <button id="load-ext">Load Extension</button>
+    <button id="open-devtools">DevTools</button>
+  </div>
+
+  <div style="flex:1; position:relative;">
+    <webview id="view" src="https://www.google.com"></webview>
+    <div id="error-box">
+      <div id="error-msg"></div>
+      <button id="retry">Retry</button>
+    </div>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    const webview = document.getElementById('view');
+    const urlInput = document.getElementById('url');
+    const goBtn = document.getElementById('go');
+    const backBtn = document.getElementById('back');
+    const forwardBtn = document.getElementById('forward');
+    const loadExtBtn = document.getElementById('load-ext');
+    const openDevtoolsBtn = document.getElementById('open-devtools');
+    const retryBtn = document.getElementById('retry');
+    const errorBox = document.getElementById('error-box');
+    const errorMsg = document.getElementById('error-msg');
+
+    // Navigation buttons
+    goBtn.addEventListener('click', () => {
+      let url = urlInput.value.trim();
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      errorBox.style.display = 'none';
+      webview.loadURL(url);
+    });
+
+    backBtn.addEventListener('click', () => webview.goBack());
+    forwardBtn.addEventListener('click', () => webview.goForward());
+
+    // Update URL bar
+    webview.addEventListener('did-navigate', (e) => urlInput.value = e.url);
+
+    // Error handling
+    webview.addEventListener('did-fail-load', (e) => {
+      errorMsg.textContent = `Failed to load ${e.validatedURL || urlInput.value}: ${e.errorDescription}`;
+      errorBox.style.display = 'block';
+    });
+
+    retryBtn.addEventListener('click', () => {
+      errorBox.style.display = 'none';
+      webview.reload();
+    });
+
+    // Load Extension
+    loadExtBtn.addEventListener('click', async () => {
+      const result = await ipcRenderer.invoke('load-extension');
+      if (result.success) {
+        alert(`Extension "${result.name}" loaded successfully!`);
+      } else {
+        alert('Failed to load extension: ' + result.message);
+      }
+    });
+
+    // Open webview devtools
+    openDevtoolsBtn.addEventListener('click', () => {
+      try {
+        webview.openDevTools();
+      } catch (e) {
+        console.error('DevTools error:', e);
+      }
+    });
+  </script>
+</body>
+</html>
